@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <title></title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script src="js/jquery.min.js"></script>
+
+
+</head>
+<style>
+    #Page{
+        width: 1024px;
+        height: 100%;
+        overflow: scroll;
+        border: #000 2px solid;
+        background:url("img/map.jpg") no-repeat 0 0;
+    }
+
+    #canvas{
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column" id="Page" style="border:none;padding:0;">
+                <canvas id="canvas" width="1024" height="730">
+                    <span id="">设备不支持CANVAS</span>
+                </canvas>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    (function(){
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+
+//        //设置图片
+//        ctx.beginPath();
+//        var pic = new Image();
+//        pic.src ="img/map.jpg";
+//        pic.onload = function() {
+//            var height = document.body.clientHeight;
+//            var width = document.body.clientWidth ;
+//            ctx.drawImage(pic, 0,0);
+//            var bg = ctx.createPattern(pic,"repeat");
+//            //ctx.fillStyle = bg;
+//            //ctx.fillRect(100,100,200,200)
+//            // canvas.width = width;
+//            // canvas.height = height;
+//        }
+//        // ctx.stroke();
+
+
+
+        //设置长宽
+        // ctx.width = 1024;
+        // ctx.height = 768
+
+
+
+    //动点封装
+    /*
+    *
+    * */
+
+        var state;
+
+    function movingPoint(x,y,x1,y1,x2,y2,stopM,param){
+
+
+        var org = {
+            // x: Math.random()*canvas.width,
+            // y: Math.random() * canvas.height
+            x:x,
+            y:y
+        };
+
+        var now = {
+            x:x1,
+            y:y1
+        };
+
+        var newxy = {
+            x: x2,
+            y: y2
+        };
+
+
+        function init() {
+            //ctx.globalCompositeOperation = "source-over";
+
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.moveTo(org.x, org.y);
+            ctx.lineTo(now.x, now.y);
+            ctx.strokeStyle = 'rgba(255,100,0,1)'; //线条颜色
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(200 , 300 , 3 , 0 , 360 * Math.PI / 180 , false);
+            ctx.fillStyle="yellow";//填充颜色,默认是黑色
+            ctx.fill();//画实心圆
+            ctx.closePath();
+            // ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(now.x, now.y);
+            ctx.lineTo(400, 300);
+            ctx.stroke();
+            //ctx.save();
+
+            ctx.beginPath();
+            ctx.arc(400 , 300 , 3 , 0 , 360 * Math.PI / 180 , false);
+            ctx.fillStyle="yellow";//填充颜色,默认是黑色
+            ctx.fill();//画实心圆
+            ctx.closePath();
+            ctx.save();
+
+            ctx.beginPath();
+            ctx.moveTo(400, 300);
+            ctx.lineTo(500, 200);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(500 , 200 , 3 , 0 , 360 * Math.PI / 180 , false);
+            ctx.fillStyle="blue";//填充颜色,默认是黑色
+            ctx.fill();//画实心圆
+            ctx.closePath();
+            ctx.save();
+
+            math();
+        }
+
+
+        var i = 1;
+        function math() {
+            var wid = Math.abs(now.x - org.x);//x轴的长，绝对值
+            var hei = Math.abs(now.y - org.y);//y轴长
+            var length = Math.pow(Math.pow(wid, 2) + Math.pow(hei, 2), 1 / 2);//（长平方＋宽平方）开根 ，其实就是直角三角关系
+            if (i < length) {//通过SetInterval，按照Length方向每次运行1px
+                if (org.x < now.x) {
+                    newxy.x = org.x +wid / length * i;
+                }else {
+                    newxy.x = org.x - wid / length * i;
+                }
+                if (org.y < now.y) {
+                    newxy.y = org.y + hei / length * i;
+                }else {
+                    newxy.y = org.y - hei / length * i;
+                }
+                i++;
+            }
+            comment();
+
+        }
+
+
+        //活动点
+        function comment() {
+            ctx.beginPath();
+            ctx.arc(newxy.x, newxy.y, 4, 0, Math.PI * 2, true);
+            ctx.fillStyle="white";
+
+            ctx.fill();
+            ctx.stroke();
+            //console.log(newxy.x,newxy.y)
+            if(newxy.x>stopM){
+                clearInterval(activeARC);
+                //state = window.confirm("是否继续游戏！");
+                //if(state){
+//                    movingPoint(200,300,400,300,0,0);
+                //}
+            }
+        }
+
+        function clean() {
+            var height = document.body.clientHeight;
+            var width = document.body.clientWidth ;
+
+            //ctx.clearRect(x, y-300, 500, 730);
+            ctx.restore();
+            // ctx.drawImage(pic, 0,0);
+        }
+
+        var activeARC = setInterval(function () {
+            clean();
+            init();
+        }, 10);
+
+        ctx.closePath();
+    }
+
+        movingPoint(0,0,200,300,0,0,199,"newxy.x");
+      //  movingPoint(200,300,400,300,200,300,398,"newxy.x");
+
+//        window.onload("load", init(), true);
+
+
+
+        //点击事件
+        canvas.onclick = function(e) {
+            e = e || event;
+            var x = e.clientX - canvas.offsetLeft;
+            //获取点击后x的坐标
+            var y = e.clientY - canvas.offsetTop;
+             console.log('clientX',e.clientX,"offsetLeft",canvas.offsetLeft,'e',e)
+             console.log('clientY',e.clientY,"offsetTop",canvas.offsetTop)
+             console.log('测试X',x,"测试Y",y)
+            //获取点击后y的坐标
+            if(x<210&&x>190 && y<310&&y>290){
+                //console.log(x,y);
+                //var state = window.confirm("是否继续游戏！");
+                //console.log(state)
+                state = window.confirm("恭喜到达第一关,是否继续游戏！");
+                if(state){
+                    console.log("开始了")
+                    //ctx.clearRect(0, 0, 1024, 730);
+    //                    ctx.beginPath();
+    //                    ctx.moveTo(0, 0);
+    //                    ctx.lineTo(200, 300);
+    //                    ctx.strokeStyle = 'rgba(255,100,0,1)'; //线条颜色
+    //                    ctx.stroke();
+                    movingPoint(200,300,400,300,200,300,398,"newxy.x");
+                }
+            }
+
+            if(x<410&&x>390 && y<310&&y>290){
+                //console.log(x,y);
+                //var state = window.confirm("是否继续游戏！");
+                //console.log(state)
+                state = window.confirm("恭喜到达第二关,是否继续游戏！");
+                if(state){
+                    console.log("开始了")
+                    //ctx.clearRect(0, 0, 1024, 730);
+                    //                    ctx.beginPath();
+                    //                    ctx.moveTo(0, 0);
+                    //                    ctx.lineTo(200, 300);
+                    //                    ctx.strokeStyle = 'rgba(255,100,0,1)'; //线条颜色
+                    //                    ctx.stroke();
+                    movingPoint(400,300,500,200,400,300,498,"newxy.x");
+                }
+            }
+        }
+
+
+
+
+//
+//        var startX = 0;
+//        //触摸开始时X坐标（相对于页面起始左上角位置）
+//        var startY = 0;
+//        //触摸开始时Y坐标（相对于页面起始左上角位置）
+//        var mapObj;
+//
+//        $(document).ready(function() {
+//            mapObj = $("#canvas");
+//        });
+//        //触摸开始时候调用
+//        function touchStart(ev) {
+//            var touch = ev.touches[0];
+//            //我们使用单根手指滑动地图，所以要取到touchList第一个
+//
+//            var mapLeft = parseInt(mapObj.css("left"));
+//            //取触摸开始时候地图的相对left
+//            var mapTop = parseInt(mapObj.css("top"));
+//            //取触摸开始时候地图的相对top
+//
+//            //触摸的坐标减去地图的相对位置得到的就是地图左上角的实际坐标
+//            startX = touch.pageX - mapLeft;
+//            startY = touch.pageY - mapTop;
+//        }
+//
+//        //移动手指时候调用
+//        function touchMove(ev) {
+//            ev.preventDefault();
+//            //取消事件的默认动作（重要）
+//            var touch = ev.touches[0];
+//
+//            mapObj.css("left", touch.pageX - startX + "px");
+//            //将位移值付给地图实现拖拉效果
+//            mapObj.css("top", touch.pageY - startY + "px");
+//        }
+    })()
+</script>
+</html>
