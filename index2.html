@@ -72,11 +72,13 @@
         position: fixed;
         left: -285px;
         background: #333;
-        top: 7rem;
+        top: 0;
+        bottom: 0;
+        right:auto;
+        margin: auto;        
         width: 300px;
         height: 300px;
         border-radius: 10px;
-        /*border-color: #333;*/
         z-index:3;
         color:red;
     }
@@ -100,7 +102,17 @@
     }
 
     .sidebar>ul>li.active{background:white}
-
+    .rankUl{margin: 0;display: flex}
+    .rankUl>li{
+        background: white;
+        flex: 1;
+        padding: 12px 0;
+        margin: 15px;
+        border-radius: 50%;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    
     /*清除bootstrap属性*/
     .table>thead:first-child>tr:first-child>th{border-bottom:0; }
     .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
@@ -323,9 +335,17 @@
                             </table>
                         </div>
                         <div style="display:none">
-                            <ul>
-                                <li>北京</li>
-                                <li>上海</li>
+                            <ul class="rankUl">
+                                <li><span>北京</span></li>
+                                <li><span>上海</span></li>
+                                <li><span>深圳</span></li>
+                                <li><span>重庆</span></li>
+                            </ul>
+                            <ul class="rankUl">
+                                <li><span>北京</span></li>
+                                <li><span>上海</span></li>
+                                <li><span>深圳</span></li>
+                                <li><span>重庆</span></li>
                             </ul>
                         </div>
                     </div>
@@ -429,6 +449,7 @@
         var beveling = getBeveling(x2-x1,y2-y1);
         //计算有多少个线段
         var num = Math.floor(beveling/dashLen);
+        ctx.strokeStyle = 'rgba(255,0,0,0)';//虚线的颜色
         for(var i = 0 ; i < num; i++){
             ctx[i%2 == 0 ? 'moveTo' : 'lineTo'](x1+(x2-x1)/num*i,y1+(y2-y1)/num*i);
         }
@@ -547,7 +568,7 @@
 
             ctx.beginPath();
             ctx.lineWidth = 3;
-            ctx.strokeStyle = 'rgba(255,0,0,1)';
+            ctx.strokeStyle = 'rgba(255,0,0,0)';//轨迹颜色
             ctx.moveTo(points[t - 1].x, points[t - 1].y);
             ctx.lineTo(points[t].x, points[t].y);
             ctx.stroke();
@@ -697,7 +718,6 @@
     var energyBar = $('.energyBar');
     energyRele.on('click',function(){
         if(energyBar.css('width')=='0px') return;
-
         if(positionStatus==1){
             animateDot(590,413,545,413,20,100);
             positionStatus = 2;
@@ -760,7 +780,7 @@
         var targetValue = $(this).attr('value');
         if(targetValue){
             $('.answerPanel').hide();
-            alert('恭喜答对了！')
+            alert('恭喜答对了！');
             //animateDot(80,200,180,200,0,20);dotDataFlag
             var x = dotData[dotDataFlag].x;
             var y = dotData[dotDataFlag].y;
