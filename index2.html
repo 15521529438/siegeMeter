@@ -127,7 +127,6 @@
     }
 
 
-
     .cityIntroduce{
         position: fixed;
         top: 42px;
@@ -138,6 +137,7 @@
         height: 100%;
         background: #333;
         color: red;
+        padding-top:37px;
     }
 
 
@@ -234,6 +234,29 @@
 <body>
     <header>
         <h2 class="topTitle">攻城记</h2>
+        <!-- 头部地区进度条 -->
+        <div class="headerBarBox">
+            <ul class="clearfix">
+                <li style="flex:2;">
+                    <div class="hBBLeft">
+                        <span>Lv2</span>
+                        <span>深圳</span>
+                    </div>
+                </li>
+                <li style="flex:5;">
+                    <div class="progress progress-striped active" style="margin-bottom:0;height:12px;margin-top:8px;">
+                        <div class="bar" style="width: 100%;position: relative;">
+                            <span style="position: absolute;top: -3px;left: 0;right: 0;bottom: 0;margin: auto;">60</span>
+                        </div>
+                    </div>
+                </li>
+                <li style="flex:1;">
+                    <div class="hBBRight">
+                        <span>1</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </header>
     <div class="container">
         <!-- 欢迎页面 -->
@@ -248,29 +271,7 @@
         <canvas id="myCanvas" style="position: fixed; z-index: 2;">您的浏览器不支持canvas!</canvas>
 
         <div class="row clearfix canvasBox">
-            <!-- 头部地区进度条 -->
-            <div class="headerBarBox">
-                <ul class="clearfix">
-                    <li style="flex:2;">
-                        <div class="hBBLeft">
-                            <span>Lv2</span>
-                            <span>深圳</span>
-                        </div>
-                    </li>
-                    <li style="flex:5;">
-                        <div class="progress progress-striped active" style="margin-bottom:0;height:13px;margin-top:8px;">
-                            <div class="bar" style="width: 100%;position: relative;">
-                                <span style="position: absolute;top: -3px;left: 0;right: 0;bottom: 0;margin: auto;">60</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li style="flex:1;">
-                        <div class="hBBRight">
-                            <span>1</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <!-- 头部地区进度条开始的位置 -->
 
             <div class="" id="Page" style="border:none;padding:0;">
                 <canvas id="canvas" width="1095" height="712">
@@ -350,7 +351,7 @@
 
         <!-- 能量槽 -->
         <div class="energyBox">
-            <div class="progress progress-striped active">
+            <div class="progress progress-striped active" style="position: relative;">
                 <div class="bar energyBar" style="width: 100%;">
                     <span style="position: absolute;top: -5px;font-size: 11px;left: 0;right: 0;bottom: 0;margin: auto;">30</span>
                 </div>
@@ -368,7 +369,7 @@
         <!--</div>-->
 
 
-        <div class="cityIntroduce">城市介绍！
+        <div class="cityIntroduce">城市介绍！<br/><br/>
             <button class="offClick">关闭</button>
         </div>
     </div>
@@ -441,19 +442,19 @@
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(605,440);
-    drawDashLine(ctx,605,440,590,413,5);
-    //ctx.lineTo(300, 100);
-    drawDashLine(ctx,590,413,545,413,5);
-    // ctx.lineTo(80, 200);
-    drawDashLine(ctx,545,413,565,445,5);
-    // ctx.lineTo(10, 100);
-    //ctx.lineTo(0, 0);
-    drawDashLine(ctx,565,445,566,470,5);
-    drawDashLine(ctx,566,470,823,335,5);
-    drawDashLine(ctx,823,335,839,167,5);
-    drawDashLine(ctx,839,167,467,135,5);
-    drawDashLine(ctx,467,135,290,391,5);
-    drawDashLine(ctx,290,391,394,671,5);
+//    drawDashLine(ctx,605,440,590,413,5);
+//    drawDashLine(ctx,590,413,545,413,5);
+//    drawDashLine(ctx,545,413,565,445,5);
+//    drawDashLine(ctx,565,445,566,470,5);
+//    drawDashLine(ctx,566,470,823,335,5);
+//    drawDashLine(ctx,823,335,839,167,5);
+//    drawDashLine(ctx,839,167,467,135,5);
+//    drawDashLine(ctx,467,135,290,391,5);
+//    drawDashLine(ctx,290,391,394,671,5);
+
+    for(var i=0;i<dotData.length-1;i++){
+        drawDashLine(ctx,dotData[i].x,dotData[i].y,dotData[i+1].x,dotData[i+1].y,5);
+    }
     // stroke the path
     //ctx.stroke();
 
@@ -736,7 +737,7 @@
                 setTimeout(cancelAnimationFrame(timerId),6000);
                 $('#myCanvas').hide();
             }
-            if(positionStatus==4){
+            if(positionStatus==9){
                 alert('恭喜到达终点!')
             }else{
                 setTimeout(stop,6000);
