@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0,user-scalable=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes"/>
     <title></title>
     <link rel="stylesheet" href="css/reset.css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
@@ -27,11 +27,11 @@
 
 
     #Page{
-        width: 1024px;
-        height: 730px;
+        width: 1095px;
+        height: 712px;
         position: relative;
         border: #000 2px solid;
-        background:url("img/map.jpg") no-repeat 0 0;
+        background:url("img/siegeMeterBackground2.png") no-repeat 0 0;
     }
 
     #canvas{
@@ -46,9 +46,9 @@
 
     #localtionImg{
         position: absolute;
-        top: 38px;
+        top: 378px;
         z-index: 1;
-        left: 280px;
+        left: 583px;
         display: none;
         z-index: 1;
     }
@@ -113,6 +113,9 @@
     .table tbody tr.info > td{
         background: rgba(217, 233, 247, 0);
     }
+    .row{
+        margin-left: 0px;
+    }
     
     
     .container{
@@ -171,17 +174,106 @@
         padding: 10px;
         border-radius: 5px;
     }
+
+    .welcomeBox{
+        position: fixed;
+        z-index: 5;
+        background: white;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 240px;
+        height: 215px;
+        font-size: 16px;
+        margin: auto;
+        text-align: center;
+        border-radius: 5px;
+        display: none;
+    }
+    .activeDetails{
+        text-align: right;
+        padding-right: 14px;
+    }
+
+    .welcomeBox>span{
+        position: absolute;
+        right: 0;
+        margin: 5px;
+    }
+
+    .headerBarBox{
+        position: fixed;
+        top: 50px;
+        z-index: 2;
+        width: 100%;
+    }
+    .headerBarBox>ul>li{
+        /*float: left;*/
+    }
+    .headerBarBox>ul{
+        margin: 0;
+        display:flex;
+    }
+
+    .hBBLeft{
+        margin: 0 3px;
+        background: red;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 5px;
+    }
+
+    .hBBRight{
+        margin: 0 2px;
+        text-align: center;
+        background: white;
+        line-height: 30px;
+    }
 </style>
 <body>
     <header>
         <h2 class="topTitle">攻城记</h2>
     </header>
     <div class="container">
+        <!-- 欢迎页面 -->
+        <div class="welcomeBox">
+            <span>X</span>
+            <h4>欢迎来到攻城记主题活动</h4>
+            <br/>
+            <p style="display: block;padding: 0 14px;">&nbsp;&nbsp;&nbsp;在这里,通过不断使用微V的功能,你可以将活跃值转换为步数,在属于你的万科地图上行走,我们将在某些城市关卡设置奖品和小游戏,期待你顺利攻城!</p>
+            <div class="activeDetails"><p style="display: inline-block;">活动详情</p><span>→</span></div>
+        </div>
+
         <canvas id="myCanvas" style="position: fixed; z-index: 2;">您的浏览器不支持canvas!</canvas>
 
         <div class="row clearfix canvasBox">
+            <!-- 头部地区进度条 -->
+            <div class="headerBarBox">
+                <ul class="clearfix">
+                    <li style="flex:2;">
+                        <div class="hBBLeft">
+                            <span>Lv2</span>
+                            <span>深圳</span>
+                        </div>
+                    </li>
+                    <li style="flex:5;">
+                        <div class="progress progress-striped active" style="margin-bottom:0;height:13px;margin-top:8px;">
+                            <div class="bar" style="width: 100%;position: relative;">
+                                <span style="position: absolute;top: -3px;left: 0;right: 0;bottom: 0;margin: auto;">60</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="flex:1;">
+                        <div class="hBBRight">
+                            <span>1</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
             <div class="" id="Page" style="border:none;padding:0;">
-                <canvas id="canvas" width="1024" height="730">
+                <canvas id="canvas" width="1095" height="712">
                     <span id="">设备不支持canvas</span>
                 </canvas>
 
@@ -259,7 +351,9 @@
         <!-- 能量槽 -->
         <div class="energyBox">
             <div class="progress progress-striped active">
-                <div class="bar" style="width: 100%;"></div>
+                <div class="bar energyBar" style="width: 100%;">
+                    <span style="position: absolute;top: -5px;font-size: 11px;left: 0;right: 0;bottom: 0;margin: auto;">30</span>
+                </div>
             </div>
             <button class="energyRele">释放</button>
             <button class="replenishRele">充能</button>
@@ -306,9 +400,15 @@
         };
     }());
 
-    localStorage.setItem('dotData',JSON.stringify([{'x':300,'y':100},{'x':80,'y':200},{'x':180,'y':200},{'x':500,'y':400},{'x':330,'y':400}]))
+    localStorage.setItem('dotData',JSON.stringify([{'x':605,'y':440},{'x':590,'y':413},{'x':545,'y':413},{'x':565,'y':445},{'x':566,'y':470},{'x':823,'y':335},{'x':839,'y':167},{'x':467,'y':135},{'x':290,'y':391},{'x':394,'y':671}]))
     var dotData;
-    localStorage.getItem('dotData')?dotData=JSON.parse(localStorage.getItem('dotData')):dotData=[{'x':300,'y':100},{'x':80,'y':200},{'x':180,'y':200},{'x':500,'y':400},{'x':330,'y':400}];
+    localStorage.getItem('dotData')?dotData=JSON.parse(localStorage.getItem('dotData')):dotData=[{'x':605,'y':440},{'x':590,'y':413},{'x':545,'y':413},{'x':565,'y':445},{'x':566,'y':470},{'x':823,'y':335},{'x':839,'y':167},{'x':467,'y':135},{'x':290,'y':391},{'x':394,'y':671}];
+
+//页面一开始移动的位置
+//    $('.container').scrollLeft(1000).scrollTop(1000);
+    $('.container').animate({scrollTop:600,scrollLeft:400}, 0,function(){
+        $('.welcomeBox').show();
+    });
 
 
     var canvas = document.getElementById("canvas");
@@ -326,10 +426,8 @@
         dashLen = dashLen === undefined ? 5 : dashLen;
         //得到斜边的总长度
         var beveling = getBeveling(x2-x1,y2-y1);
-        //console.log('beveling',Math.floor(beveling))
         //计算有多少个线段
         var num = Math.floor(beveling/dashLen);
-
         for(var i = 0 ; i < num; i++){
             ctx[i%2 == 0 ? 'moveTo' : 'lineTo'](x1+(x2-x1)/num*i,y1+(y2-y1)/num*i);
         }
@@ -342,15 +440,20 @@
     ctx.lineCap = "round";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(300,100);
-    drawDashLine(ctx,300,100,80,200,5);
+    ctx.moveTo(605,440);
+    drawDashLine(ctx,605,440,590,413,5);
     //ctx.lineTo(300, 100);
-    drawDashLine(ctx,80,200,180,200,5);
+    drawDashLine(ctx,590,413,545,413,5);
     // ctx.lineTo(80, 200);
-    drawDashLine(ctx,180,200,500,400,5);
+    drawDashLine(ctx,545,413,565,445,5);
     // ctx.lineTo(10, 100);
     //ctx.lineTo(0, 0);
-    drawDashLine(ctx,500,400,330,400,5);
+    drawDashLine(ctx,565,445,566,470,5);
+    drawDashLine(ctx,566,470,823,335,5);
+    drawDashLine(ctx,823,335,839,167,5);
+    drawDashLine(ctx,839,167,467,135,5);
+    drawDashLine(ctx,467,135,290,391,5);
+    drawDashLine(ctx,290,391,394,671,5);
     // stroke the path
     //ctx.stroke();
 
@@ -443,7 +546,7 @@
 
             ctx.beginPath();
             ctx.lineWidth = 3;
-            ctx.strokeStyle = 'rgba(255,0,0,0)';
+            ctx.strokeStyle = 'rgba(255,0,0,1)';
             ctx.moveTo(points[t - 1].x, points[t - 1].y);
             ctx.lineTo(points[t].x, points[t].y);
             ctx.stroke();
@@ -481,12 +584,12 @@
         var realX = x - getBoundingClientRectLeft;
 
         console.log('clientY',e.clientY,"offsetTop",canvas.offsetTop)
-        console.log('测试X',realX,"测试Y",realY)
+        console.log('测试X',realX,"测试Y",y)
         //console.log('元素上边距离页面上边的距离',canvas.getBoundingClientRect().top,'元素左边距离页面左边的距离',canvas.getBoundingClientRect().left)
 
         var canvasBox = $('.canvasBox');
         var cityIntroduce = $('.cityIntroduce');
-        if(realX<90 && realX>70 && realY<252 && realY>232){
+        if(realX<615 && realX>595 && realY<490 && realY>470){
 //           var state = window.confirm("恭喜到达第一关,是否继续游戏！");
 //            if(state){
 //                animateDot(300,100,80,200,100);
@@ -590,25 +693,40 @@
     //释放能量
     var positionStatus = false;
     var energyRele = $('.energyRele');
-    var bar = $('.bar');
+    var energyBar = $('.energyBar');
     energyRele.on('click',function(){
-        if(bar.css('width')=='0px') return;
+        if(energyBar.css('width')=='0px') return;
 
         if(positionStatus==1){
-            animateDot(80,200,180,200,20,100);
+            animateDot(590,413,545,413,20,100);
             positionStatus = 2;
         }else if(positionStatus==2){
-            animateDot(180,200,500,400,20,100);
+            animateDot(545,413,565,445,20,100);
             positionStatus = 3;
         }else if(positionStatus==3){
-            animateDot(500,400,330,400,20,100);
+            animateDot(565,445,566,470,20,100);
             positionStatus = 4;
+        }else if(positionStatus==4){
+            animateDot(566,470,823,335,20,100);
+            positionStatus = 5;
+        }else if(positionStatus==5){
+            animateDot(823,335,839,167,20,100);
+            positionStatus = 6;
+        }else if(positionStatus==6){
+            animateDot(839,167,467,135,20,100);
+            positionStatus = 7;
+        }else if(positionStatus==7){
+            animateDot(467,135,290,391,20,100);
+            positionStatus = 8;
+        }else if(positionStatus==8){
+            animateDot(290,391,394,671,20,100);
+            positionStatus = 9;
         }else{
-            animateDot(300,100,80,200,0,100);
+            animateDot(605,440,590,413,0,100);
             positionStatus = 1;
         }
 
-        bar.css('width',0);
+        energyBar.css('width',0);
         var localtionLeft = activeXY[0].x.toFixed(0)-20;
         var localtionTop = activeXY[0].y.toFixed(0)-63;
         localtionImg.animate({left:localtionLeft+'px',top:localtionTop+'px'},3000,function(){
@@ -631,7 +749,7 @@
     //充能
     var replenishRele = $('.replenishRele');
     replenishRele.on('click',function(){
-        $('.bar').css('width','100%');
+        $('.energyBar').css('width','100%');
     })
 
 
@@ -664,6 +782,13 @@
     clearData.on('click',function(){
         localStorage.clear();
     })
+
+    //关闭活动详情页
+    var welcomeBoxSpan = $('.welcomeBox>span');
+    welcomeBoxSpan.on('click',function(){
+        $('.welcomeBox').hide();
+    })
+
 
     //烟花
     var timerId;
@@ -837,5 +962,23 @@
         loop();
 
     }
+
+
+//    (function(){
+//        $.ajax({
+//            type: "post",
+//            url: "http://10.38.239.152:9999/energy/commitquestion",
+//            success: function(data, textStatus){
+//                console.log('成功',data)
+//            },
+//            error:function(){
+//                console.log('访问失败')
+//            }
+//        })
+//    })()
+
+
+
+
 </script>
 </html>
